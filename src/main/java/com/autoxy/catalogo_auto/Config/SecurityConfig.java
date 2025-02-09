@@ -1,4 +1,4 @@
-package com.autoxy.catalogo_auto;
+package com.autoxy.catalogo_auto.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
