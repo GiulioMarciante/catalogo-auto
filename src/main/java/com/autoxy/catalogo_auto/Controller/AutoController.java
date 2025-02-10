@@ -2,11 +2,15 @@ package com.autoxy.catalogo_auto.Controller;
 
 import com.autoxy.catalogo_auto.DTO.AutoRequestDTO;
 import com.autoxy.catalogo_auto.DTO.AutoResponseDTO;
+import com.autoxy.catalogo_auto.Enum.StatoAuto;
 import com.autoxy.catalogo_auto.Service.AutoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -82,5 +86,26 @@ public class AutoController {
     @DeleteMapping("/{id}")
     public void deleteAuto(@PathVariable Long id) {
         autoService.deleteById(id);
+    }
+
+    /**
+     * Endpoint per la ricerca di auto con filtri opzionali.
+     *
+     * @param marca Marca dell'auto (case-insensitive). Se null, ignora il filtro.
+     * @param prezzoMin Prezzo minimo. Se null, ignora il filtro.
+     * @param prezzoMax Prezzo massimo. Se null, ignora il filtro.
+     * @param stato Stato dell'auto. Se null, ignora il filtro.
+     * @param pageable Paginazione e ordinamento dei risultati.
+     * @return Pagina di risultati contenente DTO delle auto che soddisfano i criteri.
+     */
+    @GetMapping("/search")
+    public Page<AutoResponseDTO> searchAuto(
+            @RequestParam(required = false) String marca,
+            @RequestParam(required = false) BigDecimal prezzoMin,
+            @RequestParam(required = false) BigDecimal prezzoMax,
+            @RequestParam(required = false) StatoAuto stato,
+            Pageable pageable) {
+
+        return autoService.search(marca, prezzoMin, prezzoMax, stato, pageable);
     }
 }

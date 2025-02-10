@@ -2,13 +2,17 @@ package com.autoxy.catalogo_auto.Service;
 
 import com.autoxy.catalogo_auto.DTO.AutoRequestDTO;
 import com.autoxy.catalogo_auto.DTO.AutoResponseDTO;
+import com.autoxy.catalogo_auto.Enum.StatoAuto;
 import com.autoxy.catalogo_auto.Model.Auto;
 import com.autoxy.catalogo_auto.Repository.AutoRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -90,5 +94,27 @@ public class AutoServiceImpl implements AutoService{
     @Transactional
     public void deleteById(Long id) {
         autoRepository.deleteById(id);
+    }
+
+    /**
+     * Ricerca auto con filtri opzionali e restituisce i risultati paginati.
+     *
+     * @param marca Marca dell'auto (case-insensitive). Se null, ignora il filtro.
+     * @param prezzoMin Prezzo minimo. Se null, ignora il filtro.
+     * @param prezzoMax Prezzo massimo. Se null, ignora il filtro.
+     * @param stato Stato dell'auto. Se null, ignora il filtro.
+     * @param pageable Paginazione e ordinamento dei risultati.
+     * @return Pagina di risultati contenente DTO delle auto che soddisfano i criteri.
+     * @throws NoSuchElementException Se nessuna auto viene trovata.
+     */
+    @Override
+    public Page<AutoResponseDTO> search(String marca, BigDecimal prezzoMin, BigDecimal prezzoMax, StatoAuto stato, Pageable pageable) {
+        Page<Auto> autoPage = autoRepository.search(marca != null ? marca.toLowerCase() : null, stato, prezzoMin, prezzoMax, pageable);
+
+        if (autoPage.isEmpty()) {
+            throw new NoSuchElementException("Nessuna auto trovata con i criteri di ricerca specificati.");
+        }
+
+        return autoPage.map(auto -> modelMapper.map(auto, AutoResponseDTO.class));
     }
 }
