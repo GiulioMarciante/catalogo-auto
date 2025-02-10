@@ -43,7 +43,7 @@ public class AutoController {
      * @apiNote GET /api/auto/{id}
      */
     @GetMapping("/{id}")
-    public Optional<AutoResponseDTO> getAutoById(@PathVariable Long id) {
+    public AutoResponseDTO getAutoById(@PathVariable Long id) {
         return autoService.findById(id);
     }
 
