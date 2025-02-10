@@ -5,7 +5,6 @@ import com.autoxy.catalogo_auto.DTO.AutoResponseDTO;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * Service layer per la gestione delle automobili.
@@ -21,9 +20,9 @@ public interface AutoService {
     /**
      * Cerca un'auto per ID
      * @param id Identificativo dell'auto
-     * @return Optional contenente l'auto se trovata
+     * @return AutoResponseDTO contenente l'auto se trovata
      */
-    Optional<AutoResponseDTO> findById(Long id);
+    AutoResponseDTO findById(Long id);
 
     /**
      * Salva una nuova auto

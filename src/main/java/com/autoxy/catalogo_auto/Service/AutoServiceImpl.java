@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -40,14 +39,17 @@ public class AutoServiceImpl implements AutoService{
     }
 
     /**
-     * Recupera un'auto per ID convertendola in AutoResponseDTO.
-     * @param id Identificativo dell'auto
-     * @return Optional contenente l'auto se trovata
+     * Recupera un'auto dal catalogo in base all'ID specificato e la restituisce come {@link AutoResponseDTO}.
+     *
+     * @param id L'ID dell'auto da cercare. Non deve essere nullo.
+     * @return {@link AutoResponseDTO} contenente i dettagli dell'auto trovata.
+     * @throws NoSuchElementException Se non esiste un'auto con l'ID specificato.
      */
     @Override
-    public Optional<AutoResponseDTO> findById(Long id) {
-        return autoRepository.findById(id)
-                .map(auto -> modelMapper.map(auto, AutoResponseDTO.class));
+    public AutoResponseDTO findById(Long id) {
+        Auto auto = autoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Auto non trovata con ID: " + id));
+        return modelMapper.map(auto, AutoResponseDTO.class);
     }
 
     /**
