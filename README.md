@@ -1,4 +1,5 @@
 Documentazione per Avviare e Testare l'Applicazione
+
 1.Requisiti di Sistema
     Prima di avviare l'applicazione, assicurati di avere installato i seguenti strumenti:
   
