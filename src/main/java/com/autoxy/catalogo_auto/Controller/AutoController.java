@@ -4,6 +4,9 @@ import com.autoxy.catalogo_auto.DTO.AutoRequestDTO;
 import com.autoxy.catalogo_auto.DTO.AutoResponseDTO;
 import com.autoxy.catalogo_auto.Enum.StatoAuto;
 import com.autoxy.catalogo_auto.Service.AutoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +37,13 @@ public class AutoController {
      * @apiNote GET /api/auto
      */
     @GetMapping
+    @Operation(summary = "Ottiene la lista di tutte le auto")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
+
     public List<AutoResponseDTO> getAllAuto() {
         return autoService.findAll();
     }
@@ -47,6 +57,13 @@ public class AutoController {
      * @apiNote GET /api/auto/{id}
      */
     @GetMapping("/{id}")
+    @Operation(summary = "Ottieni auto per ID")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     public AutoResponseDTO getAutoById(@PathVariable Long id) {
         return autoService.findById(id);
     }
@@ -59,6 +76,12 @@ public class AutoController {
      * @apiNote POST /api/auto
      */
     @PostMapping
+    @Operation(summary = "Creazione nuova auto")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     public AutoResponseDTO createAuto(@Valid @RequestBody AutoRequestDTO autoRequestDTO) {
         return autoService.save(autoRequestDTO);
     }
@@ -73,6 +96,13 @@ public class AutoController {
      * @apiNote PUT /api/auto/{id}
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Modifica dei valori dell'auto attraverso ID")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     public AutoResponseDTO updateAuto(@PathVariable Long id, @Valid @RequestBody AutoRequestDTO autoRequestDTO) {
         return autoService.update(id, autoRequestDTO);
     }
@@ -84,6 +114,12 @@ public class AutoController {
      * @apiNote DELETE /api/auto/{id}
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminazione di un auto attraverso ID")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     public void deleteAuto(@PathVariable Long id) {
         autoService.deleteById(id);
     }
@@ -99,6 +135,13 @@ public class AutoController {
      * @return Pagina di risultati contenente DTO delle auto che soddisfano i criteri.
      */
     @GetMapping("/search")
+    @Operation(summary = "Ricerca auto con parametri opzionali marca,prezzoMin,prezzoMax,stato con Pageable")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Server Error")
+    })
     public Page<AutoResponseDTO> searchAuto(
             @RequestParam(required = false) String marca,
             @RequestParam(required = false) BigDecimal prezzoMin,
