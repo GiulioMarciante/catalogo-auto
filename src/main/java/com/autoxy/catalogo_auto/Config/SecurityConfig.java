@@ -25,6 +25,7 @@ public class SecurityConfig {
      * <p>
      * - Permette l'accesso libero alla console H2.<br>
      * - Permette l'accesso in lettura (GET, POST, PUT, DELETE) alle API delle auto a tutti.<br>
+     * - Permette l'accesso alla documentazione swagger e Api-docs
      * - Richiede autenticazione per qualsiasi altra richiesta.<br>
      * - Disabilita CSRF per facilitare le richieste REST.<br>
      * - Abilita il supporto ai frame per la console H2.<br>
@@ -32,6 +33,7 @@ public class SecurityConfig {
      *
      * @param http l'oggetto {@link HttpSecurity} per la configurazione della sicurezza
      * @return un'istanza di {@link SecurityFilterChain}
+     *
      * @throws Exception se si verifica un errore durante la configurazione della sicurezza
      */
     @Bean
@@ -43,6 +45,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auto/**").permitAll() // POST aperto a tutti
                         .requestMatchers(HttpMethod.PUT, "/api/auto/**").permitAll() // PUT aperto a tutti
                         .requestMatchers(HttpMethod.DELETE, "/api/auto/**").permitAll() // DELETE aperto a tutti
+                        .requestMatchers("/swagger-ui/**").permitAll() // Permette l'accesso console swagger
+                        .requestMatchers("/api-docs/**").permitAll() // Permette l'accesso alla documentazione API
                         .anyRequest().authenticated() // Richiede autenticazione per qualsiasi altra richiesta
                 )
                 .csrf(AbstractHttpConfigurer::disable) // Disabilita la protezione CSRF per le richieste REST
